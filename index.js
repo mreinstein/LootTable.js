@@ -8,22 +8,22 @@
  *
  * Example:
  *
- * const loot = new LootTable();
- * loot.add('sword', 20);
- * loot.add('shield', 5);
- * loot.add('gold', 5);
- * loot.add(null, 1);
- * const item = loot.choose(); // most likely a sword, sometimes null
+ * const lt = new LootTable.create()
+ * LootTable.add(lt, 'sword', 20)
+ * LootTable.add(lt, 'shield', 5)
+ * LootTable.add(lt, 'gold', 5)
+ * LootTable.add(lt, null, 1)
+ * const item = LootTable.choose(lt) // most likely a sword, sometimes null
  */
-const LootTable = function(table=[]) {
-    this.table = table;
-};
+export function create () {
+    return [ ]
+}
 
-LootTable.prototype.constructor = LootTable;
 
-LootTable.prototype.clear = function() {
-    this.table.length = 0;
-};
+export function clear (table) {
+    table.length = 0
+}
+
 
 /**
  * Add an item
@@ -41,48 +41,48 @@ LootTable.prototype.clear = function() {
  * @param {number} weight   (optional) The weight of the item, defaults to 1
  * @param {number} quantity (optional) Quantity available, defaults to Infinite
  */
-LootTable.prototype.add = function(item, weight, quantity) {
+export function add (table, item, weight, quantity) {
     if (weight === undefined || weight === null || weight <= 0)
-        weight = 1;
-    if (!Number.isInteger(quantity) || quantity <= 0)
-        quantity = Number.POSITIVE_INFINITY;
+        weight = 1
 
-    this.table.push({ item, weight, quantity });
-};
+    if (!Number.isInteger(quantity) || quantity <= 0)
+        quantity = Number.POSITIVE_INFINITY
+
+    table.push({ item, weight, quantity })
+}
+
 
 /**
  * Return a random item from the LootTable
  */
-LootTable.prototype.choose = function() {
-    if (this.table.length === 0)
-        return null;
+export function choose (table) {
+    if (table.length === 0)
+        return null
     
-    let totalWeight = 0;
-    for (const v of this.table)
+    let totalWeight = 0
+    for (const v of table)
         if (v.quantity > 0)
-            totalWeight += v.weight;
+            totalWeight += v.weight
 
-    let choice = 0;
-    const randomNumber = Math.floor(Math.random() * totalWeight + 1);
-    let weight = 0;
+    let choice = 0
+    const randomNumber = Math.floor(Math.random() * totalWeight + 1)
+    let weight = 0
 
-    for (let i = 0; i < this.table.length; i++) {
-        const v = this.table[i];
+    for (let i = 0; i < table.length; i++) {
+        const v = table[i]
         if (v.quantity <= 0)
-            continue;
+            continue
 
-        weight += v.weight;
+        weight += v.weight
         if (randomNumber <= weight) {
-            choice = i;
-            break;
+            choice = i
+            break
         }
     }
 
-    const chosenItem = this.table[choice];
-    this.table[choice].quantity--;
+    const chosenItem = table[choice]
+    table[choice].quantity--
 
-    return chosenItem.item;
-};
+    return chosenItem.item
+}
 
-
-export default LootTable;

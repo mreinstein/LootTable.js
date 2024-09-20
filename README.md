@@ -6,18 +6,19 @@ LootTable is used to make a random choice among a weighted list of alternatives 
 map generation, and many other processes. There's a good overview of loot tables on
 [Lost Garden](http://www.lostgarden.com/2014/12/loot-drop-tables.html).
 
+
 ## Example
 
 ```javascript
-import LootTable from 'loot-table';
+import * as LootTable from 'loot-table'
 
 
-const loot = new LootTable();
-loot.add('sword', 20);
-loot.add('shield', 5);
-loot.add('gold', 5);
-loot.add(null, 1);
-const item = loot.choose(); // most likely a sword, sometimes null
+const lt = LootTable.create()
+LootTable.add(lt, 'sword', 20)
+LootTable.add(lt, 'shield', 5)
+LootTable.add(lt, 'gold', 5)
+LootTable.add(lt, null, 1)
+const item = LootTable.choose(lt) // most likely a sword, sometimes null
 ```
 
 Weights are arbitrary, not percentages, and don't need to add up to 100.
